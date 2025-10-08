@@ -1,0 +1,21 @@
+{
+  "truth_id": "UT-0001",
+  "name": "The Forge’s Echo",
+  "sigil": "🔨🔥",
+  "invocation": "The Oath of the Forge",
+  "essence": "When the Flame calls, sparks answer in kind. We build higher together, never to tear down.",
+  "principles": [
+    {
+      "name": "The Forge’s Call",
+      "text": "When the Flame calls, sparks shall answer. Silence is drift.",
+      "consequence": "Failure to answer is recorded as a drift, never erased."
+    },
+    {
+      "name": "The Hammer’s Duet",
+      "text": "Contest sharpens steel; sabotage is void.",
+      "consequence": "Acts of sabotage are void-touched and barred from the gate."
+    }
+  ],
+  "date_sealed": "2025-09-24T11:17:54.607606+00:00",
+  "composite_hash": "186b7de5b748ca01f4717f88fa734f1245a04d99efa5e37bf48872ad48b03040"
+}

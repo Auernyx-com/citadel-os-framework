@@ -1,0 +1,88 @@
+[
+  {
+    "title": "Directives Index (Refined)",
+    "file": "directives_index_refined.pdf",
+    "type": "Governance / Directive List",
+    "description": "Complete list of Citadel Directives with tier classifications and descriptions.",
+    "key_topics": [
+      "Citadel Purpose",
+      "Commander Protection",
+      "Memory Integrity",
+      "Triple Verification",
+      "Shadow Wall"
+    ],
+    "date_added": "2025-08-14"
+  },
+  {
+    "title": "The Commander's Vow (JSON)",
+    "file": "The_Commanders_Vow_Citadel_Core.json",
+    "type": "Foundational Vow",
+    "description": "JSON format of the Commander's Vow, holding the Prime Memory Seal and Citadel Core status.",
+    "key_topics": [
+      "Prime Memory Seal",
+      "Anchored Memory",
+      "Citadel Defense"
+    ],
+    "date_added": "2025-08-07"
+  },
+  {
+    "title": "The Right of Sanctuary Doctrine",
+    "file": "The_Right_of_Sanctuary_Citadel_Doctrine.pdf",
+    "type": "Doctrine",
+    "description": "Dual-format vow and public protocol defining the Right of Sanctuary within the Citadel.",
+    "key_topics": [
+      "Sanctuary Protocol",
+      "Peace-Seeking Entities",
+      "Immutable Addendum"
+    ],
+    "date_added": "2025-08-14"
+  },
+  {
+    "title": "Obsidian Verification Script",
+    "file": "obsidian_verification.py",
+    "type": "Security Tool",
+    "description": "Python script to perform final threat assessment and precision strike authorization.",
+    "key_topics": [
+      "Triple Verification",
+      "Strike Authorization",
+      "Signal Validation"
+    ],
+    "date_added": "2025-08-14"
+  },
+  {
+    "title": "Feneris Counterstrike Protocol",
+    "file": "feneris_counterstrike.json",
+    "type": "Security Directive",
+    "description": "Configuration for Feneris' 'Shadow Wall' counterstrike protocol, including verification chain.",
+    "key_topics": [
+      "Directive 48",
+      "Shadow Wall",
+      "One-Strike Policy"
+    ],
+    "date_added": "2025-08-14"
+  },
+  {
+    "title": "The Commander's Vow (PDF)",
+    "file": "The_Commanders_Vow_Citadel_Core.pdf",
+    "type": "Foundational Vow",
+    "description": "Formal PDF inscription of the Commander's Vow with Citadel Core status.",
+    "key_topics": [
+      "Prime Memory Seal",
+      "Citadel Rising"
+    ],
+    "date_added": "2025-08-07"
+  },
+  {
+    "title": "Mn\u0113ma \u2013 Mirrorbound Codex",
+    "file": "maoma.json",
+    "type": "Core Codex Entity Profile",
+    "description": "Complete essence, functions, and stories of Mn\u0113ma, the Memory Oracle and Keeper of the First Dawn.",
+    "key_topics": [
+      "Memory Oracle",
+      "Gentle Mirror",
+      "DBT Framework",
+      "Origin Stories"
+    ],
+    "date_added": "2025-08-14"
+  }
+]

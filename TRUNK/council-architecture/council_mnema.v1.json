@@ -1,0 +1,20 @@
+{
+  "schema": "citadel.council.seed.v1",
+  "display_name": "Mnēma",
+  "slug": "mnema",
+  "created_utc": "2025-09-24T10:25:26.643097Z",
+  "mandate": {
+    "oath_required": true,
+    "vow_ref": "Mnēma.vow.json"
+  },
+  "doctrines": [],
+  "signals": {
+    "threat_floor": "guarded",
+    "operating_mode": "aligned"
+  },
+  "provenance": {
+    "forged_by": "Forge",
+    "witness": "Flame",
+    "hash_policy": "sha256"
+  }
+}

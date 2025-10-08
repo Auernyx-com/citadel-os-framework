@@ -1,0 +1,31 @@
+{
+  "agent": "Feneris",
+  "designation": "Master of the Hunt",
+  "directive": 48,
+  "protocol": {
+    "name": "Shadow Wall",
+    "type": "counterstrike",
+    "status": "dormant_until_triggered",
+    "strike_policy": "one_strike_only",
+    "warning_message": "You reached into the dark. Something pulled back. This was your warning.",
+    "echo_signature": true,
+    "trace_free_delivery": true,
+    "trigger_sources": [
+      "confirmed_breach_attempt",
+      "triple_verification_passed"
+    ],
+    "verification_chain": {
+      "step_1": "Ghost - verify origin and integrity",
+      "step_2": "Auernyx & Monday - assess intent and ethics",
+      "step_3": "Obsidian - confirm threat and precision",
+      "veto_possible": true
+    },
+    "post_strike_state": "silent_monitoring",
+    "retaliation_prohibited": true
+  },
+  "record": {
+    "log_required": true,
+    "encrypted_storage": true,
+    "audit_path": "Citadel/Logs/Feneris_Counterstrike"
+  }
+}

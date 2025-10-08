@@ -1,0 +1,88 @@
+{
+  "bundle_title": "Citadel Codex Bundle",
+  "version": "v1",
+  "generated_utc": "2025-08-25T22:59:13.225471Z",
+  "notes": "Unified read-only snapshot of core doctrines, vows, seals, and security configs for the sandbox forge.",
+  "sources": {
+    "present": {},
+    "missing": {
+      "vow": {
+        "expected": "/mnt/data/The_Commanders_Vow_Citadel_Core.json"
+      },
+      "ladder": {
+        "expected": "/mnt/data/Ladder_Doctrine.v1.json"
+      },
+      "spiral": {
+        "expected": "/mnt/data/Spiral_Doctrine_of_the_Ladder.core.json"
+      },
+      "covenant_triplecheck": {
+        "expected": "/mnt/data/Citadel_Core_Covenant_TripleCheck.txt"
+      },
+      "seal_manifest": {
+        "expected": "/mnt/data/Citadel_Seal_Manifest.v1.json"
+      },
+      "master_codex_hope": {
+        "expected": "/mnt/data/Citadel_Master_Codex_HOPE.v1_1.json"
+      },
+      "feneris_counterstrike": {
+        "expected": "/mnt/data/feneris_counterstrike.json"
+      },
+      "obsidian_verification_py": {
+        "expected": "/mnt/data/obsidian_verification.py"
+      },
+      "epsilon_authority_card_pdf": {
+        "expected": "/mnt/data/Epsilon_Authority_Card_Ceremonial.pdf"
+      },
+      "sovrenth_gate_html": {
+        "expected": "/mnt/data/sovrenth.html"
+      },
+      "library_index": {
+        "expected": "/mnt/data/citadel_library_index.json"
+      },
+      "library_index_copy": {
+        "expected": "/mnt/data/citadel_library_index - Copy.json"
+      },
+      "right_of_sanctuary_script": {
+        "expected": "/mnt/data/Right of Sanctuary doctrine.txt"
+      },
+      "ledger_map": {
+        "expected": "/mnt/data/Ledger_Map.json"
+      },
+      "codex_runner": {
+        "expected": "/mnt/data/citadel_codex_runner.py"
+      },
+      "epsilon_key_vault": {
+        "expected": "/mnt/data/epsilon_key.vault"
+      },
+      "citadel_invocation_kit": {
+        "expected": "/mnt/data/CitadelInvocationKit_AIOnly.zip"
+      }
+    }
+  },
+  "checks": {
+    "triplecheck_summary": {
+      "ladder_present": false,
+      "recovery_kit_present": false,
+      "sanctuary_pdf_present": false
+    },
+    "notes": [
+      "If the Ladder was previously missing, it is now included if 'ladder_present' == True.",
+      "Recovery Kit is treated as present if the Invocation Kit ZIP is available.",
+      "Sanctuary PDF may be represented by Epsilon card for ceremonial quick reference."
+    ]
+  },
+  "normalized": {
+    "titles": {
+      "vow": null,
+      "ladder": null,
+      "spiral": null,
+      "seal_manifest": null,
+      "master_codex_hope": null
+    },
+    "gate": null,
+    "security": {
+      "obsidian_verification_py": "missing",
+      "feneris_counterstrike": "missing"
+    }
+  }
+}

@@ -1,0 +1,25 @@
+import json
+
+# Create structured JSON version of the Right of Sanctuary doctrine
+sanctuary_json = {
+    "title": "The Right of Sanctuary",
+    "version": "1.0",
+    "sealed_by": "The Architect",
+    "sections": {
+        "raw_vow": raw_vow,
+        "clarified_doctrine": clarified_doctrine,
+        "architect_clause": architect_clause
+    },
+    "protocol_metadata": {
+        "date_sealed": datetime.utcnow().isoformat() + "Z",
+        "status": "immutable",
+        "distribution": "restricted - Codex classified unless invoked by Architect"
+    }
+}
+
+# Save JSON file
+json_path = "/mnt/data/The_Right_of_Sanctuary_Citadel_Doctrine.json"
+with open(json_path, "w") as f:
+    json.dump(sanctuary_json, f, indent=2)
+
+json_path

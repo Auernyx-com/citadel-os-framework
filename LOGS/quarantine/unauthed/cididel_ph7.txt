@@ -1,0 +1,293 @@
+echo "🛡️ Deploying Phase 6: Advanced Firewall & IoT Segmentation..."
+
+ 
+
+# ===== Step 1: Set Firewall Defaults with Protection =====
+
+uci set firewall.@defaults[0].input='REJECT'
+
+uci set firewall.@defaults[0].output='ACCEPT'
+
+uci set firewall.@defaults[0].forward='REJECT'
+
+uci set firewall.@defaults[0].synflood_protect='1'
+
+uci set firewall.@defaults[0].drop_invalid='1'
+
+ 
+
+# ===== Step 2: Clean Existing Zones (except lan & wan) =====
+
+iptables -F
+
+iptables -X
+
+ 
+
+# ===== Step 3: Define LAN zone =====
+
+uci set firewall.lan=zone
+
+uci set firewall.lan.name='lan'
+
+uci set firewall.lan.input='ACCEPT'
+
+uci set firewall.lan.output='ACCEPT'
+
+uci set firewall.lan.forward='ACCEPT'
+
+uci set firewall.lan.network='lan'
+
+ 
+
+# ===== Step 4: Define WAN zone =====
+
+uci set firewall.wan=zone
+
+uci set firewall.wan.name='wan'
+
+uci set firewall.wan.input='REJECT'
+
+uci set firewall.wan.output='ACCEPT'
+
+uci set firewall.wan.forward='REJECT'
+
+uci set firewall.wan.masq='1'
+
+uci set firewall.wan.mtu_fix='1'
+
+uci set firewall.wan.network='wan wan6'
+
+ 
+
+# ===== Step 5: Define IoT VLAN and zone =====
+
+# Assuming VLAN interface is 'eth0.3' — replace if different
+
+uci set network.iot='interface'
+
+uci set network.iot.ifname='eth0.3'
+
+uci set network.iot.proto='static'
+
+uci set network.iot.ipaddr='192.168.3.1'
+
+uci set network.iot.netmask='255.255.255.0'
+
+uci commit network
+
+ 
+
+uci set firewall.iot=zone
+
+uci set firewall.iot.name='iot'
+
+uci set firewall.iot.input='REJECT'
+
+uci set firewall.iot.output='ACCEPT'
+
+uci set firewall.iot.forward='REJECT'
+
+uci set firewall.iot.network='iot'
+
+ 
+
+# ===== Step 6: Allow forwarding LAN → WAN =====
+
+uci set firewall.lan_wan=forwarding
+
+uci set firewall.lan_wan.src='lan'
+
+uci set firewall.lan_wan.dest='wan'
+
+ 
+
+# ===== Step 7: Allow forwarding IoT → WAN (restricted) =====
+
+uci set firewall.iot_wan=forwarding
+
+uci set firewall.iot_wan.src='iot'
+
+uci set firewall.iot_wan.dest='wan'
+
+ 
+
+# ===== Step 8: Block WAN access to LuCI =====
+
+uci delete firewall.block_luci_from_wan 2>/dev/null
+
+uci set firewall.block_luci_from_wan='rule'
+
+uci set firewall.block_luci_from_wan.name='Block LuCI From WAN'
+
+uci set firewall.block_luci_from_wan.src='wan'
+
+uci set firewall.block_luci_from_wan.dest_port='80 443'
+
+uci set firewall.block_luci_from_wan.proto='tcp'
+
+uci set firewall.block_luci_from_wan.target='REJECT'
+
+ 
+
+# ===== Step 9: Drop all WAN input =====
+
+uci delete firewall.drop_all_wan_input 2>/dev/null
+
+uci set firewall.drop_all_wan_input='rule'
+
+uci set firewall.drop_all_wan_input.name='Drop All WAN Input'
+
+uci set firewall.drop_all_wan_input.src='wan'
+
+uci set firewall.drop_all_wan_input.proto='all'
+
+uci set firewall.drop_all_wan_input.target='DROP'
+
+ 
+
+# ===== Step 10: VPN Kill Switch Integration =====
+
+VPN_IF="tun0"  # Change to wg0 or your VPN interface name
+
+ 
+
+cat <<EOF >> /etc/firewall.user
+
+ 
+
+# VPN Kill Switch
+
+if ! ip a show "$VPN_IF" up | grep -q "inet "; then
+
+    logger "[KILL SWITCH] VPN interface $VPN_IF is down — blocking WAN"
+
+    iptables -I FORWARD -o eth0 -j DROP
+
+    iptables -I OUTPUT -o eth0 -j DROP
+
+else
+
+    logger "[KILL SWITCH] VPN interface $VPN_IF is UP — WAN allowed"
+
+fi
+
+EOF
+
+ 
+
+# ===== Step 11: Enable DROP logging =====
+
+uci set firewall.@defaults[0].log='1'
+
+ 
+
+# ===== Step 12: Install and configure banIP for auto blocking =====
+
+opkg update
+
+opkg install luci-app-banip ipset curl ca-certificates
+
+ 
+
+/etc/init.d/banip enable
+
+/etc/init.d/banip start
+
+ 
+
+# ===== Step 13: Configure GeoIP blocking =====
+
+# Requires ipset and geoip modules installed (pre-install geoip-core etc.)
+
+# Example: block CN, RU, KP, IR - modify as needed
+
+ 
+
+ipset create geo_blacklist hash:net hashsize 1024 maxelem 65536 2>/dev/null || true
+
+ 
+
+for country in CN RU KP IR; do
+
+  wget -qO- https://www.ipdeny.com/ipblocks/data/countries/${country,,}.zone | while read ip; do
+
+    ipset add geo_blacklist $ip 2>/dev/null || true
+
+  done
+
+done
+
+ 
+
+uci delete firewall.geoip_block 2>/dev/null
+
+uci set firewall.geoip_block='rule'
+
+uci set firewall.geoip_block.name='Block GeoIP Blacklist'
+
+uci set firewall.geoip_block.src='wan'
+
+uci set firewall.geoip_block.src_ipset='geo_blacklist'
+
+uci set firewall.geoip_block.target='DROP'
+
+ 
+
+# ===== Step 14: Rate limit IoT services to reduce noisy devices impact =====
+
+uci delete firewall.iot_ssh_limit 2>/dev/null
+
+uci set firewall.iot_ssh_limit='rule'
+
+uci set firewall.iot_ssh_limit.name='Limit IoT SSH'
+
+uci set firewall.iot_ssh_limit.src='iot'
+
+uci set firewall.iot_ssh_limit.dest_port='22'
+
+uci set firewall.iot_ssh_limit.proto='tcp'
+
+uci set firewall.iot_ssh_limit.target='ACCEPT'
+
+uci set firewall.iot_ssh_limit.limit='3/minute'
+
+uci set firewall.iot_ssh_limit.limit_burst='6'
+
+ 
+
+uci delete firewall.iot_mdns_limit 2>/dev/null
+
+uci set firewall.iot_mdns_limit='rule'
+
+uci set firewall.iot_mdns_limit.name='Limit IoT mDNS'
+
+uci set firewall.iot_mdns_limit.src='iot'
+
+uci set firewall.iot_mdns_limit.dest_port='5353'
+
+uci set firewall.iot_mdns_limit.proto='udp'
+
+uci set firewall.iot_mdns_limit.target='ACCEPT'
+
+uci set firewall.iot_mdns_limit.limit='10/minute'
+
+uci set firewall.iot_mdns_limit.limit_burst='20'
+
+ 
+
+# ===== Step 15: Commit all changes =====
+
+uci commit network
+
+uci commit firewall
+
+ 
+
+# ===== Step 16: Restart services =====
+
+/etc/init.d/network restart
+
+/etc/init.d/firewall restart
+
+/etc/init.d/banip restart

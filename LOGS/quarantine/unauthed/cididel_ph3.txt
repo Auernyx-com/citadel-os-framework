@@ -1,0 +1,53 @@
+# Step 3: Telegram Alert Script Setup (Fill in your BOT_TOKEN and CHAT_ID later)
+
+mkdir -p /usr/bin
+
+ 
+
+cat <<'EOF' > /usr/bin/send-alert.sh
+
+#!/bin/sh
+
+BOT_TOKEN="PASTE_YOUR_BOT_TOKEN_HERE"
+
+CHAT_ID="PASTE_YOUR_CHAT_ID_HERE"
+
+MESSAGE="$1"
+
+ 
+
+curl -s -X POST https://api.telegram.org/bot$BOT_TOKEN/sendMessage \
+
+-d chat_id=$CHAT_ID \
+
+-d text="$MESSAGE"
+
+EOF
+
+ 
+
+chmod +x /usr/bin/send-alert.sh
+
+ 
+
+echo "✅ Telegram alert script deployed at /usr/bin/send-alert.sh"
+
+echo "⚠️ Remember to update BOT_TOKEN and CHAT_ID in /usr/bin/send-alert.sh"
+
+ 
+
+# Step 4: Enable DROP logging for firewall (to log dropped packets)
+
+uci set firewall.@defaults[0].log='1'
+
+uci commit firewall
+
+/etc/init.d/firewall restart
+
+ 
+
+echo "✅ DROP logging enabled."
+
+ 
+
+echo "🎯 Phase 2 complete: Defense Suite deployed."

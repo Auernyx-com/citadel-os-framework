@@ -1,0 +1,7 @@
+{
+  "codex_version": "3.8",
+  "bundle_file": "Citadel_Codex_Bundle.v1.json",
+  "bundle_sha256": "756acd08cd485f8ca0d6ef319c2f5afc82c401adeb154cca7dedee22a41975e4",
+  "generated_utc": "2025-08-25T23:57:41.975202Z",
+  "notes": "Canonical 3.8 milestone artifact. Treat as read-only. Use cards/index for serving."
+}

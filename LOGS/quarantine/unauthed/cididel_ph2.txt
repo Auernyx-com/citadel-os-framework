@@ -1,0 +1,67 @@
+Phase 2: VPN + Defense Suite + Alerts
+
+ 
+
+#!/bin/sh
+
+echo "🛡️ Phase 2: Enhanced Defense Suite Deploying..."
+
+ 
+
+# Step 1: Install banIP and dependencies
+
+opkg update
+
+opkg install luci-app-banip ipset curl ca-certificates
+
+ 
+
+/etc/init.d/banip enable
+
+/etc/init.d/banip start
+
+ 
+
+echo "✅ banIP installed and running."
+
+ 
+
+# Step 2: VPN Kill Switch Setup for Mullvad
+
+ 
+
+VPN_IF="tun0"  # Change to your Mullvad VPN interface if different (e.g., wg0 for WireGuard)
+
+ 
+
+FIREWALL_USER="/etc/firewall.user"
+
+ 
+
+# Append VPN kill switch script to firewall.user
+
+cat <<EOF >> $FIREWALL_USER
+
+ 
+
+# VPN Kill Switch (added by glinet-defense-suite)
+
+if ! ip a show "$VPN_IF" up | grep -q "inet "; then
+
+  logger "[KILL SWITCH] VPN interface $VPN_IF is down — blocking WAN"
+
+  iptables -I FORWARD -o eth0 -j DROP
+
+  iptables -I OUTPUT -o eth0 -j DROP
+
+else
+
+  logger "[KILL SWITCH] VPN interface $VPN_IF is UP — WAN allowed"
+
+fi
+
+EOF
+
+ 
+
+echo "✅ VPN-aware kill switch added to firewall.user."

@@ -1,0 +1,203 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Citadel Codex — Offline Viewer (No Python)</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <style>
+    :root { --bg:#0b1020; --fg:#e8eefc; --muted:#9bb0d6; --card:#141a33; --acc:#8aa2ff; }
+    body { background:var(--bg); color:var(--fg); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; margin:0; }
+    header { padding:16px 20px; border-bottom:1px solid #243055; position:sticky; top:0; background:linear-gradient(180deg, rgba(11,16,32,.95), rgba(11,16,32,.8)); backdrop-filter: blur(6px); }
+    h1 { margin:0; font-size:20px; letter-spacing:.5px; }
+    .container { max-width:1100px; margin:0 auto; padding:20px; }
+    .panel { background:#0e1430; border:1px dashed #2b3866; padding:12px; border-radius:12px; color:var(--muted); }
+    .panel strong { color:var(--fg); }
+    .panel input[type=file] { margin-top:8px; }
+    .search { display:flex; gap:10px; margin:16px 0 8px; }
+    input[type=text] { flex:1; padding:12px 14px; border-radius:12px; border:1px solid #2b3866; background: #0e1430; color:var(--fg); }
+    button { padding:12px 16px; border-radius:12px; border:1px solid #2b3866; background:#17224a; color:var(--fg); cursor:pointer; }
+    button:hover { background:#1d2a5c; }
+    .grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:14px; margin-top:12px; }
+    .card { background:var(--card); border:1px solid #22305a; border-radius:16px; padding:14px; display:flex; flex-direction:column; gap:8px; }
+    .badge { font-size:12px; color:var(--muted); }
+    .title { font-weight:700; }
+    .topics { font-size:12px; color:var(--muted); }
+    .muted { color:var(--muted); font-size:12px; }
+    footer { text-align:center; color:#7d90c7; padding:20px; }
+    .hint { font-size:12px; color:#9bb0d6; margin-top:6px; }
+    .filebadge { display:inline-block; background:#0e1430; border:1px solid #2b3866; padding:4px 8px; border-radius:10px; margin-right:6px; font-size:12px; color:#9bb0d6;}
+    .row { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+    details { background:#0f1635; border:1px solid #243055; border-radius:10px; padding:8px 10px; }
+    summary { cursor:pointer; color:#9bb0d6; }
+    pre { white-space: pre-wrap; word-wrap: break-word; background:#0b112b; border:1px solid #1f2f59; padding:10px; border-radius:10px; max-height:320px; overflow:auto; }
+  </style>
+</head>
+<body>
+<header>
+  <h1>Citadel Codex — Offline Viewer</h1>
+  <div class="container">
+    <div class="panel" id="dropzone">
+      <div><strong>Load files (drag/drop or pick):</strong></div>
+      <div class="row">
+        <label>Cards JSON: <input type="file" id="cardsFile" accept=".json"/></label>
+        <label>Index JSON: <input type="file" id="indexFile" accept=".json"/></label>
+        <label>Bundle (optional): <input type="file" id="bundleFile" accept=".json"/></label>
+        <button id="clearBtn">Clear</button>
+      </div>
+      <div class="hint">Use <code>citadel_codex_cards.json</code> and <code>citadel_library_index.json</code>. The Bundle enables deep lookups.</div>
+      <div id="loadedBadges" style="margin-top:6px;"></div>
+    </div>
+
+    <form class="search" onsubmit="event.preventDefault(); doSearch();">
+      <input type="text" id="q" placeholder="Search titles, topics, or summaries…"/>
+      <button type="button" onclick="doSearch()">Search</button>
+      <button type="button" onclick="resetSearch()">Reset</button>
+      <span class="muted" id="count"></span>
+    </form>
+  </div>
+</header>
+
+<div class="container">
+  <div class="grid" id="grid"></div>
+
+  <details style="margin-top:24px;" id="bundlePanel" hidden>
+    <summary>Bundle Snapshot</summary>
+    <div class="muted">Quick peek from the loaded Codex Bundle (titles & security presence)</div>
+    <pre id="bundleInfo"></pre>
+  </details>
+</div>
+
+<footer>No Python. No server. Your files never leave the browser.</footer>
+
+<script>
+let CARDS = [];
+let INDEX = [];
+let BUNDLE = null;
+
+function renderBadges(){
+  const el = document.getElementById('loadedBadges');
+  const items = [];
+  if (CARDS.length) items.push(`<span class="filebadge">Cards ✓ (${CARDS.length})</span>`);
+  if (INDEX.length) items.push(`<span class="filebadge">Index ✓ (${INDEX.length})</span>`);
+  if (BUNDLE) items.push(`<span class="filebadge">Bundle ✓</span>`);
+  el.innerHTML = items.join(" ");
+}
+
+function byId(id){ return document.getElementById(id); }
+function norm(s){ return (s||"").toString().toLowerCase().replace(/\s+/g," ").trim(); }
+
+function renderCards(list){
+  const grid = byId('grid');
+  grid.innerHTML = "";
+  const count = byId('count');
+  count.textContent = (list.length || 0) + " item(s) " + (byId('q').value ? "matched" : "loaded");
+
+  list.forEach(c => {
+    const div = document.createElement('div');
+    div.className = 'card';
+    const topics = (c.key_topics || []).join(", ");
+    div.innerHTML = `
+      <div class="badge">${c.category || "uncategorized"}</div>
+      <div class="title">${c.id || ""} — ${c.title || "(untitled)"} </div>
+      <div class="summary">${c.summary || ""}</div>
+      ${topics ? `<div class="topics">Topics: ${topics}</div>` : ""}
+      ${c.origin_file ? `<div class="muted">File: ${c.origin_file}</div>` : ""}
+      ${BUNDLE ? `<button style="margin-top:8px" onclick='showBundle("${c.origin_file||""}")'>Peek in Bundle</button>` : ""}
+    `;
+    grid.appendChild(div);
+  });
+}
+
+function doSearch(){
+  const q = norm(byId('q').value);
+  if (!q){ renderCards(CARDS); return; }
+  const res = CARDS.filter(c => {
+    const hay = [c.id, c.title, c.summary, (c.key_topics||[]).join(" "), c.category].join(" ");
+    return norm(hay).includes(q);
+  });
+  renderCards(res);
+}
+
+function resetSearch(){
+  byId('q').value = "";
+  renderCards(CARDS);
+}
+
+function loadJSONFile(input, target){
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (target === 'cards') CARDS = data;
+      if (target === 'index') INDEX = data;
+      if (target === 'bundle') BUNDLE = data;
+      renderBadges();
+      if (target === 'cards') renderCards(CARDS);
+      if (target === 'bundle') renderBundleInfo();
+    } catch(err){
+      alert("Invalid JSON: " + err.message);
+    }
+  };
+  reader.readAsText(file);
+}
+
+function showBundle(origin){
+  if (!BUNDLE){ alert("Load the Bundle first."); return; }
+  const present = (BUNDLE.sources && BUNDLE.sources.present) || {};
+  let found = null;
+  for (const [key, obj] of Object.entries(present)){
+    if (obj.path && origin && obj.path.endsWith("/"+origin)){
+      found = obj; break;
+    }
+  }
+  const out = byId('bundleInfo');
+  byId('bundlePanel').hidden = false;
+  if (!found){
+    out.textContent = "No bundle entry found for: " + origin + "\n\nAvailable keys:\n" + Object.keys(present).join(", ");
+  } else {
+    out.textContent = JSON.stringify({
+      key: origin,
+      path: found.path,
+      sha256: found.sha256,
+      content_preview: found.content_preview || (typeof found.content === 'string' ? found.content.slice(0,800) : "(structured or long)")
+    }, null, 2);
+  }
+  out.scrollIntoView({behavior:'smooth'});
+}
+
+// Drag & drop
+const dropzone = byId('dropzone');
+dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.style.borderColor = '#3b4fa0'; });
+dropzone.addEventListener('dragleave', e => { dropzone.style.borderColor = '#2b3866'; });
+dropzone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropzone.style.borderColor = '#2b3866';
+  const files = Array.from(e.dataTransfer.files);
+  files.forEach(f => {
+    if (f.name.endsWith("cards.json")) {
+      const input = byId('cardsFile'); input.files = createFileList([f]); loadJSONFile(input, 'cards');
+    } else if (f.name.endsWith("library_index.json")) {
+      const input = byId('indexFile'); input.files = createFileList([f]); loadJSONFile(input, 'index');
+    } else if (f.name.includes("Bundle") && f.name.endsWith(".json")) {
+      const input = byId('bundleFile'); input.files = createFileList([f]); loadJSONFile(input, 'bundle');
+    }
+  });
+});
+// helper to programmatically set <input type=file>.files
+function createFileList(files) {
+  const dt = new DataTransfer();
+  files.forEach(f => dt.items.add(f));
+  return dt.files;
+}
+byId('cardsFile').addEventListener('change', e => loadJSONFile(e.target, 'cards'));
+byId('indexFile').addEventListener('change', e => loadJSONFile(e.target, 'index'));
+byId('bundleFile').addEventListener('change', e => loadJSONFile(e.target, 'bundle'));
+byId('clearBtn').addEventListener('click', () => { CARDS=[]; INDEX=[]; BUNDLE=null; renderBadges(); renderCards([]); byId('bundlePanel').hidden=true; byId('bundleInfo').textContent=""; });
+</script>
+</body>
+</html>
+<!-- replace with -->
+${topics ? `<div class="topics">Topics:
+${topics}</div>` : ""}

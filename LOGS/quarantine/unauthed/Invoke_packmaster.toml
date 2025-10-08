@@ -1,0 +1,13 @@
+[agent]
+name = "Pack Master"
+role = "Commander of the Hunt"
+status = "dormant"
+
+[trigger]
+command = "invoke_packmaster"
+authorized_by = "4f9c9c3c6ddae9001dfb54e7e330cf5df849fb6944f6e17d68acdb79d422e9c5"
+
+[response]
+type = "text"
+behavior = "summons hunt protocol / wolfpack logic deployment"
+log_to = "CitadelVault/Logs/invoke_packmaster.log"

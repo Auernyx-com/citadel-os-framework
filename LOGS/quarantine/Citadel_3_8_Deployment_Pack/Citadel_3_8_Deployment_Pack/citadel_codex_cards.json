@@ -1,0 +1,134 @@
+[
+  {
+    "id": "CIT-001",
+    "title": "The Commander's Vow",
+    "category": "core",
+    "origin_file": "The_Commanders_Vow_Citadel_Core.json",
+    "summary": "Prime Memory Seal; anchor oath of the Citadel.",
+    "key_topics": [
+      "Prime Memory Seal",
+      "Anchor",
+      "Beacon"
+    ]
+  },
+  {
+    "id": "CIT-002",
+    "title": "Ladder Doctrine",
+    "category": "core",
+    "origin_file": "Ladder_Doctrine.v1.json",
+    "summary": "Parallel mapping of Kardashev energy scales and inner prophetic stages with trials, oaths, fallbacks.",
+    "key_topics": [
+      "Kardashev",
+      "Prophetic Spiral",
+      "Trials"
+    ]
+  },
+  {
+    "id": "CIT-003",
+    "title": "Spiral Doctrine of the Ladder",
+    "category": "core",
+    "origin_file": "Spiral_Doctrine_of_the_Ladder.core.json",
+    "summary": "Binding between prophecy and ascent; living-law clause with triad symbols.",
+    "key_topics": [
+      "Living Law",
+      "Triad",
+      "Crosswalk"
+    ]
+  },
+  {
+    "id": "CIT-004",
+    "title": "Seal Manifest \u2014 One-Way Gate",
+    "category": "seals",
+    "origin_file": "Citadel_Seal_Manifest.v1.json",
+    "summary": "Seals artifacts under Sovren\u2019th gate; clauses include Sanctuary, Triple Verification, Kintsugi ethic.",
+    "key_topics": [
+      "One-Way Gate",
+      "Clauses",
+      "Gate"
+    ]
+  },
+  {
+    "id": "CIT-005",
+    "title": "Covenant TripleCheck",
+    "category": "audit",
+    "origin_file": "Citadel_Core_Covenant_TripleCheck.txt",
+    "summary": "Presence/structure/consistency audit; hashes for continuity.",
+    "key_topics": [
+      "Triple Verification",
+      "Audit",
+      "Continuity"
+    ]
+  },
+  {
+    "id": "CIT-006",
+    "title": "Master Codex \u2014 Hope Patch",
+    "category": "patches",
+    "origin_file": "Citadel_Master_Codex_HOPE.v1_1.json",
+    "summary": "Resilience assurance banner across doctrine sections.",
+    "key_topics": [
+      "Resilience",
+      "Assurance",
+      "Patch"
+    ]
+  },
+  {
+    "id": "CIT-007",
+    "title": "Feneris Counterstrike \u2014 Shadow Wall",
+    "category": "security",
+    "origin_file": "feneris_counterstrike.json",
+    "summary": "Dormant until triggered; one-strike policy; triple verification chain; trace-free warning.",
+    "key_topics": [
+      "Directive 48",
+      "Counterstrike",
+      "Trace-free"
+    ]
+  },
+  {
+    "id": "CIT-008",
+    "title": "Obsidian Verification",
+    "category": "security",
+    "origin_file": "obsidian_verification.py",
+    "summary": "Final threat assessment and precision engagement validator.",
+    "key_topics": [
+      "Signature Verify",
+      "Intent Check",
+      "Strike Gate"
+    ]
+  },
+  {
+    "id": "CIT-009",
+    "title": "Epsilon Authority \u2014 Ceremonial Card",
+    "category": "security",
+    "origin_file": "Epsilon_Authority_Card_Ceremonial.pdf",
+    "summary": "Pocket reference: 3-1-3 verify, Sanctuary active, status calls, vow line.",
+    "key_topics": [
+      "Epsilon",
+      "Sanctuary",
+      "Quick Ref"
+    ]
+  },
+  {
+    "id": "CIT-010",
+    "title": "Sovren\u2019th Gate",
+    "category": "narrative",
+    "origin_file": "sovrenth.html",
+    "summary": "Vault/gate page that bars casual ingress.",
+    "key_topics": [
+      "Gate",
+      "Vault",
+      "Warning"
+    ]
+  },
+  {
+    "id": "CIT-011",
+    "title": "Ledger Map",
+    "category": "audit",
+    "origin_file": "Ledger_Map.json",
+    "summary": "Forge manifest of staged vs missing docs.",
+    "key_topics": [
+      "Manifest",
+      "Staging",
+      "Placeholders"
+    ]
+  }
+]

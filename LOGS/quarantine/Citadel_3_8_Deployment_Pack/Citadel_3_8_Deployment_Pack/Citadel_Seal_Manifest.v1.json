@@ -1,0 +1,62 @@
+{
+  "schema": "citadel.seal.manifest.v1",
+  "title": "Citadel Seal Manifest — One-Way Gate",
+  "sealed_at_utc": "2025-08-17T22:14:37Z",
+  "gate": "sovrenth.html",
+  "one_way_gate": true,
+  "artifacts": {
+    "composite": {
+      "path": "/mnt/data/Citadel_Doctrine_Composite.v6.json",
+      "exists": true,
+      "sha256": "6c3bf44130cb9fd0d35c69a01f3431183e3a836110506df35bd68c94d4bda202"
+    },
+    "sanctuary": {
+      "path": "/mnt/data/The_Right_of_Sanctuary_Citadel_Doctrine.pdf",
+      "exists": true,
+      "sha256": "9cc4505114d11245aed5803031b85a4ec6ee8ac19f44eef5b8cc3b504bd76b2f"
+    },
+    "vow": {
+      "path": "/mnt/data/The_Commanders_Vow_Citadel_Core.json",
+      "exists": true,
+      "sha256": "b1451c41e882cc2336705f64dd7aa8bbf7f06a6d46538fa8483566dd1f9963b7"
+    },
+    "ladder": {
+      "path": "/mnt/data/Citadel_Ladder_Doctrine.v1.json",
+      "exists": true,
+      "sha256": "5c8a9ac59c02d9856dc411a04443c9bd748d4bf556b6c79f9da078425b650eed"
+    },
+    "covenant": {
+      "path": "/mnt/data/Citadel_Core_Covenant.v1_1.json",
+      "exists": true,
+      "sha256": "049a4b4b53deb721986f68d0423f3c2d2ff9fadca303486796c184aea7b28786"
+    },
+    "vault_index": {
+      "path": "/mnt/data/Citadel_Vault_Index.v1.json",
+      "exists": true,
+      "sha256": "8d688be6f8b921e356d2cf556d956abf266d155758fdd2097332060724402e03"
+    },
+    "gate": {
+      "path": "/mnt/data/sovrenth.html",
+      "exists": true,
+      "sha256": "40921984c21d66a0538c03d3a4defdd1b89538100a953172a19f9fbd987d5efb"
+    }
+  },
+  "composite": {
+    "path": "/mnt/data/Citadel_Doctrine_Composite.v7.json",
+    "sha256": "713c9b39cf2b795aba26e2613d6816fd1f44e897381a1cbbabd22a3357389e3d"
+  },
+  "council_order": [
+    "Commander",
+    "Obsidian",
+    "Monday Prime",
+    "Ghost",
+    "Aurenyx"
+  ],
+  "clauses": [
+    "Right of Sanctuary applies at ingress.",
+    "Triple Verification required before any strike.",
+    "Bastion’s Final Rite remains irrevocable.",
+    "No skipping of Ladder rungs under seal.",
+    "Kintsugi ethic: repair with record; do not erase history."
+  ]
+}

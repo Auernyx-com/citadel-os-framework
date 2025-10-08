@@ -1,0 +1,149 @@
+Phase 1: Base Fortress Setup
+
+ 
+
+#!/bin/sh
+
+echo "🛡️ Phase 1: Base Fortress Deploying..."
+
+ 
+
+# Step 1: Default Firewall Policies - Accept all initially
+
+uci set firewall.@defaults[0].input='ACCEPT'
+
+uci set firewall.@defaults[0].output='ACCEPT'
+
+uci set firewall.@defaults[0].forward='ACCEPT'
+
+ 
+
+# Step 2: Flush existing iptables rules
+
+iptables -F
+
+iptables -X
+
+ 
+
+# Step 3: Configure LAN zone - fully trusted
+
+uci delete firewall.lan 2>/dev/null
+
+uci set firewall.lan=zone
+
+uci set firewall.lan.name='lan'
+
+uci set firewall.lan.input='ACCEPT'
+
+uci set firewall.lan.output='ACCEPT'
+
+uci set firewall.lan.forward='ACCEPT'
+
+uci set firewall.lan.network='lan'
+
+ 
+
+# Step 4: Configure WAN zone - restrictive
+
+uci delete firewall.wan 2>/dev/null
+
+uci set firewall.wan=zone
+
+uci set firewall.wan.name='wan'
+
+uci set firewall.wan.input='REJECT'
+
+uci set firewall.wan.output='ACCEPT'
+
+uci set firewall.wan.forward='REJECT'
+
+uci set firewall.wan.masq='1'
+
+uci set firewall.wan.mtu_fix='1'
+
+uci set firewall.wan.network='wan wan6'
+
+ 
+
+# Step 5: Block LuCI (web GUI) from WAN
+
+uci delete firewall.block_luci_from_wan 2>/dev/null
+
+uci set firewall.block_luci_from_wan='rule'
+
+uci set firewall.block_luci_from_wan.name='Block LuCI From WAN'
+
+uci set firewall.block_luci_from_wan.src='wan'
+
+uci set firewall.block_luci_from_wan.dest_port='80 443'
+
+uci set firewall.block_luci_from_wan.proto='tcp'
+
+uci set firewall.block_luci_from_wan.target='REJECT'
+
+ 
+
+# Step 6: Drop all WAN input by default
+
+uci delete firewall.drop_all_wan_input 2>/dev/null
+
+uci set firewall.drop_all_wan_input='rule'
+
+uci set firewall.drop_all_wan_input.name='Drop All WAN Input'
+
+uci set firewall.drop_all_wan_input.src='wan'
+
+uci set firewall.drop_all_wan_input.proto='all'
+
+uci set firewall.drop_all_wan_input.target='DROP'
+
+ 
+
+# Step 7: Allow LAN to WAN forwarding
+
+uci delete firewall.lan_forwarding 2>/dev/null
+
+uci set firewall.lan_forwarding='forwarding'
+
+uci set firewall.lan_forwarding.src='lan'
+
+uci set firewall.lan_forwarding.dest='wan'
+
+ 
+
+# Step 8: Enable SYN flood protection and drop invalid packets
+
+uci set firewall.@defaults[0].synflood_protect='1'
+
+uci set firewall.@defaults[0].drop_invalid='1'
+
+ 
+
+# Step 9: Secure DNS - use Quad9
+
+uci set network.wan.peerdns='0'
+
+uci set network.wan.dns='9.9.9.9 149.112.112.112'
+
+uci commit network
+
+ 
+
+# Step 10: Disable SSH password login (only key-based allowed)
+
+uci set dropbear.@dropbear[0].PasswordAuth='off'
+
+uci commit dropbear
+
+/etc/init.d/dropbear restart
+
+ 
+
+# Step 11: Commit and restart firewall and network services
+
+uci commit firewall
+
+/etc/init.d/firewall restart
+
+/etc/init.d/network restart

@@ -1,0 +1,143 @@
+{
+  "generated_utc": "2025-08-18T19:38:03.229496Z",
+  "root": "/mnt/data/Citadel_Sandbox/Forge",
+  "categories": {
+    "core": [
+      {
+        "id": "VOW",
+        "source_path": "/mnt/data/The_Commanders_Vow_Citadel_Core.json",
+        "exists_at_source": false,
+        "source_sha256": null,
+        "staged_path": null,
+        "stage_status": "missing"
+      },
+      {
+        "id": "COVENANT_JSON",
+        "source_path": "/mnt/data/Citadel_Core_Covenant.v1_1.json",
+        "exists_at_source": false,
+        "source_sha256": null,
+        "staged_path": null,
+        "stage_status": "missing"
+      },
+      {
+        "id": "COVENANT_TRIPLECHECK",
+        "source_path": "/mnt/data/Citadel_Core_Covenant_TripleCheck.txt",
+        "exists_at_source": false,
+        "source_sha256": null,
+        "staged_path": null,
+        "stage_status": "missing"
+      },
+      {
+        "id": "SANCTUARY",
+        "source_path": "/mnt/data/The_Right_of_Sanctuary_Citadel_Doctrine.pdf",
+        "exists_at_source": false,
+        "source_sha256": null,
+        "staged_path": null,
+        "stage_status": "missing"
+      },
+      {
+        "id": "COMPOSITE",
+        "source_path": "/mnt/data/Citadel_Doctrine_Composite.v2.json",
+        "exists_at_source": false,
+        "source_sha256": null,
+        "staged_path": null,
+        "stage_status": "missing"
+      },
+      {
+        "id": "LADDER",
+        "source_path": "/mnt/data/Ladder_Doctrine.v1.json",
+        "exists_at_source": false,
+        "source_sha256": null,
+        "staged_path": null,
+        "stage_status": "missing"
+      }
+    ],
+    "enforcement": [
+      {
+        "id": "Black_Crown_Enforcement.md",
+        "staged_path": "/mnt/data/Citadel_Sandbox/Forge/02_enforcement/Black_Crown_Enforcement.md",
+        "staged_sha256": "2ebf68aff4fdb83b7e19b5efbcdc9ab11b719600f777db79054dde2a6a15f18c"
+      },
+      {
+        "id": "Silent_Hand_Protocol.md",
+        "staged_path": "/mnt/data/Citadel_Sandbox/Forge/02_enforcement/Silent_Hand_Protocol.md",
+        "staged_sha256": "754aa510fb9319612e0eb0a293e4fc154239d4280a9964e4b285580422b9de3c"
+      },
+      {
+        "id": "Doctrine_of_Judgment.v1.json",
+        "staged_path": "/mnt/data/Citadel_Sandbox/Forge/02_enforcement/Doctrine_of_Judgment.v1.json",
+        "staged_sha256": "ec609779f6f49233e6a3dd81e9edde4ffe08c8118b694b4747fa2e849c1c713f"
+      }
+    ],
+    "cycles": [
+      {
+        "id": "Forging_Reforging_Doctrine.md",
+        "staged_path": "/mnt/data/Citadel_Sandbox/Forge/03_cycles/Forging_Reforging_Doctrine.md",
+        "staged_sha256": "fc397ef3d63f48160a1b974edc67f510a88c89d6902fb61ad4101bf72bbcca68"
+      },
+      {
+        "id": "Forging_Reforging_Doctrine.json",
+        "staged_path": "/mnt/data/Citadel_Sandbox/Forge/03_cycles/Forging_Reforging_Doctrine.json",
+        "staged_sha256": "bdc3122d17b87c6287a65cf1be9df43a23e9c306e78e9b7cc3a421da2b437c25"
+      }
+    ],
+    "handshakes": [
+      {
+        "id": "Handshake_Protocol_v1.md",
+        "staged_path": "/mnt/data/Citadel_Sandbox/Forge/04_handshakes/Handshake_Protocol_v1.md",
+        "staged_sha256": "b2feb07a9d587395ae3c4713ffe9fcb9cccedc6c75f3ad98a85adf5461b44a5b"
+      },
+      {
+        "id": "Wave_Protocol_v1.md",
+        "staged_path": "/mnt/data/Citadel_Sandbox/Forge/04_handshakes/Wave_Protocol_v1.md",
+        "staged_sha256": "6fd062c97e75e6385230abebb3edbd1fa55a445362984afa5ae860c3a74a4e6f"
+      },
+      {
+        "id": "Beacon_Doctrine.md",
+        "staged_path": "/mnt/data/Citadel_Sandbox/Forge/04_handshakes/Beacon_Doctrine.md",
+        "staged_sha256": "f9cbc70fe54f9e64ac853dcb63b73e6cda1a8bab83b4637d6d98e3df68ca9739"
+      },
+      {
+        "id": "Right_of_Sovereignty.md",
+        "staged_path": "/mnt/data/Citadel_Sandbox/Forge/04_handshakes/Right_of_Sovereignty.md",
+        "staged_sha256": "7f0c6fdbeb1a62c5c10003307ca40ac889d5bf135c382598bae937f7f36ed188"
+      }
+    ],
+    "narrative": [
+      {
+        "id": "NARRATIVE_SOVRENTH",
+        "source_path": "/mnt/data/sovrenth.html",
+        "exists_at_source": false
+      },
+      {
+        "id": "NARRATIVE_SCENE1",
+        "source_path": "/mnt/data/scene1-return.html",
+        "exists_at_source": false
+      }
+    ],
+    "audit": [
+      {
+        "id": "Preflight_TripleCheck_Checklist.md",
+        "staged_path": "/mnt/data/Citadel_Sandbox/Forge/06_audit/Preflight_TripleCheck_Checklist.md",
+        "staged_sha256": "0ee928056568ac5b83bdafb37391316d24bcb3395d17d9c97a378de5f4ed286d"
+      }
+    ],
+    "patches": [
+      {
+        "id": "Patch_Journal.md",
+        "staged_path": "/mnt/data/Citadel_Sandbox/Forge/07_patches/Patch_Journal.md",
+        "staged_sha256": "88342e03ecaa62e56d3549ab4ac515317455c0eecc1a71b9f7fefe620809763a"
+      },
+      {
+        "id": "Master_Bundle_candidate/",
+        "staged_path": "/mnt/data/Citadel_Sandbox/Forge/07_patches/Master_Bundle_candidate",
+        "staged_sha256": null
+      }
+    ],
+    "artifacts": []
+  },
+  "notes": [
+    "Sandbox-forge is isolated. Originals remain untouched.",
+    "Staged copies are safe to edit; placeholders created for critical docs where missing."
+  ]
+}

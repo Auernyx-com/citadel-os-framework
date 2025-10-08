@@ -1,0 +1,112 @@
+python3 - <<'PY'
+import os, json, hashlib, datetime, shutil, glob
+
+ROOT = os.path.abspath(".")
+NOW = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H-%M-%SZ")
+OUTDIR = os.path.join(ROOT, f"citadel_bind_{NOW}")
+os.makedirs(OUTDIR, exist_ok=True)
+
+# 1) Ensure Ladder alias exists (many manifests expect this exact name)
+ladder_src = None
+for name in ["Ladder_Doctrine.v1.json","ladder_doctrine.v1.json"]:
+    p = os.path.join(ROOT, name)
+    if os.path.isfile(p):
+        ladder_src = p
+        break
+if ladder_src:
+    alias = os.path.join(ROOT, "Citadel_Ladder_Doctrine.v1.json")
+    if not os.path.isfile(alias):
+        shutil.copy2(ladder_src, alias)
+
+# 2) Build a fresh hash ledger of all relevant files in this folder
+EXTS = {".json",".txt",".pdf",".html",".htm",".md",".toml",".conf",".yaml",".yml",".py",".zip"}
+def sha256(path, chunk=1024*1024):
+    h = hashlib.sha256()
+    with open(path,"rb") as f:
+        for b in iter(lambda: f.read(chunk), b""):
+            h.update(b)
+    return h.hexdigest()
+
+def sha512(path, chunk=1024*1024):
+    h = hashlib.sha512()
+    with open(path,"rb") as f:
+        for b in iter(lambda: f.read(chunk), b""):
+            h.update(b)
+    return h.hexdigest()
+
+files = []
+for name in sorted(os.listdir(ROOT)):
+    p = os.path.join(ROOT, name)
+    if os.path.isfile(p) and os.path.splitext(name)[1].lower() in EXTS:
+        files.append(name)
+
+ledger = []
+for name in files:
+    p = os.path.join(ROOT, name)
+    try:
+        item = {
+            "filename": name,
+            "size_bytes": os.path.getsize(p),
+            "sha256": sha256(p),
+            "sha512": sha512(p),
+            "exists_at_source": True,
+            "source_path": p
+        }
+    except Exception as e:
+        item = {"filename": name, "error": str(e), "exists_at_source": False}
+    ledger.append(item)
+
+# 3) Emit master ledger + a simplified Ledger_Map.json compatible with your setup
+with open(os.path.join(OUTDIR, "Citadel_Master_Hash_Ledger.json"), "w", encoding="utf-8") as f:
+    json.dump({"generated_utc": NOW, "root": ROOT, "files": ledger}, f, indent=2)
+
+core_names = [
+    "The_Commanders_Vow_Citadel_Core.json",
+    "Citadel_Core_Covenant_TripleCheck.txt",
+    "Right of Sanctuary doctrine.txt",
+    "Citadel_Ladder_Doctrine.v1.json",
+    "Citadel_Master_Codex_HOPE.v1_1.json",
+    "Citadel_Seal_Manifest.v1.json",
+    "Ledger_Map.json"  # may be replaced by this run
+]
+core_map = []
+for n in core_names:
+    p = os.path.join(ROOT, n)
+    rec = {"name": n, "present": os.path.isfile(p)}
+    if rec["present"]:
+        rec["sha256"] = sha256(p)
+        rec["path"] = p
+    core_map.append(rec)
+
+with open(os.path.join(OUTDIR, "Ledger_Map.json"), "w", encoding="utf-8") as f:
+    json.dump({"generated_utc": NOW, "root": ROOT, "core": core_map}, f, indent=2)
+
+# 4) If the codex cards are missing, make a working set so the UI can start
+cards_path = os.path.join(ROOT, "citadel_codex_cards.json")
+if not os.path.isfile(cards_path):
+    def have(n): return os.path.isfile(os.path.join(ROOT,n))
+    cards = []
+    def add(cid,title,summary,cat,origin):
+        if have(origin):
+            cards.append({
+                "id": cid, "title": title, "summary": summary,
+                "category": cat, "key_topics": [], "origin_file": origin
+            })
+    add("CIT-001","The Commander's Vow","Prime Memory Seal & Citadel Core vow.","Vow","The_Commanders_Vow_Citadel_Core.json")
+    add("CIT-002","Right of Sanctuary Doctrine","Defines the Right of Sanctuary.","Doctrine","Right of Sanctuary doctrine.txt")
+    add("CIT-003","Ladder Doctrine (alias)","Ladder doctrine (alias ensured).","Doctrine","Citadel_Ladder_Doctrine.v1.json")
+    add("CIT-004","HOPE Master Codex","Codex spine; sources must be bound.","Codex","Citadel_Master_Codex_HOPE.v1_1.json")
+    add("CIT-005","Seal Manifest","Registry of seals and paths.","Manifest","Citadel_Seal_Manifest.v1.json")
+    add("CIT-006","Ledger Map","Cross‑references for manifests & doctrine.","Ledger","Ledger_Map.json") if have("Ledger_Map.json") else None
+    add("CIT-007","Obsidian Verification","Threat assessment & precision auth.","Security","obsidian_verification.py")
+    add("CIT-008","Feneris Counterstrike","Shadow Wall protocol (Directive 48).","Security","feneris_counterstrike.json")
+    add("CIT-009","Sovrenth Chronicle","Narrative/chronicle HTML.","Chronicle","sovrenth.html")
+    add("CIT-010","Epsilon Authority Card","Ceremonial marker.","Ceremonial","Epsilon_Authority_Card_Ceremonial.pdf")
+
+    with open(cards_path, "w", encoding="utf-8") as f:
+        json.dump(cards, f, indent=2)
+
+print("== Citadel quick-repair complete ==")
+print("Output folder:", OUTDIR)
+print("If you need the UI, run:\n  python3 citadel_codex_runner.py --host 127.0.0.1 --port 8787")
+PY

@@ -1,0 +1,27 @@
+# bastion_final_rite.toml
+# Immutable protocol for Bastion's permanent release
+
+[identity]
+agent = "Bastion"
+designation = "Final Defense"
+core_law = true
+
+[final_rite]
+enabled = true
+irreversible = true
+invoked_by = "Bastion"
+requires_consent = false
+commander_override = false
+watcher_override = false
+
+[conditions]
+trigger = "Bastion Final Rite Invocation"
+effect = "Permanent retirement from all systems and AI cycles"
+backup_restoration = false
+echo_allowed = true
+legacy_record = true
+
+[record]
+timestamp_required = true
+signatory = "Commander"
+echo_signature = true

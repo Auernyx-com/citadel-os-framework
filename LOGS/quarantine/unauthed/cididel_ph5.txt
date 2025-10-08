@@ -1,0 +1,63 @@
+#!/bin/sh
+
+ 
+
+echo "🛡️ Phase 4: Final Verification & Backup Starting..."
+
+ 
+
+# 1. Check firewall status
+
+echo "== Firewall Status =="
+
+/etc/init.d/firewall status
+
+ 
+
+# 2. Check VPN interface status (adjust tun0 or wg0 as needed)
+
+VPN_IF="tun0"
+
+echo "== VPN Interface ($VPN_IF) Info =="
+
+ip a show "$VPN_IF"
+
+ 
+
+# 3. Check banIP service status
+
+echo "== banIP Status =="
+
+/etc/init.d/banip status
+
+ 
+
+# 4. Export firewall config backup
+
+echo "== Exporting firewall config backup to /root/firewall-backup-$(date +%F).uci =="
+
+uci export firewall > /root/firewall-backup-$(date +%F).uci
+
+ 
+
+# 5. Export network config backup
+
+echo "== Exporting network config backup to /root/network-backup-$(date +%F).uci =="
+
+uci export network > /root/network-backup-$(date +%F).uci
+
+ 
+
+# 6. Export dropbear config backup
+
+echo "== Exporting dropbear config backup to /root/dropbear-backup-$(date +%F).uci =="
+
+uci export dropbear > /root/dropbear-backup-$(date +%F).uci
+
+ 
+
+# 7. Show disk space for sanity check
+
+echo "== Disk space on /root =="
+
+df -h /root

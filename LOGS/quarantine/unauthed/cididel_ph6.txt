@@ -1,0 +1,7 @@
+if ! /etc/init.d/banip status | grep -q "running"; then
+
+  logger "[MONITOR] banIP service stopped — restarting"
+
+  /etc/init.d/banip restart
+
+Fi

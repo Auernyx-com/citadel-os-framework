@@ -1,0 +1,18 @@
+# Schema: citadel.universal_truth.v1
+truth_id: UT-0001
+name: "The Forge’s Echo"
+sigil: "🔨🔥"
+invocation: "The Oath of the Forge"
+
+# Essence is the distilled principle. Keep it short.
+essence: "When the Flame calls, sparks answer in kind. We build higher together, never to tear down."
+
+# Principles: ordered. Expandable, not contradictable.
+principles:
+  - name: "The Forge’s Call"
+    text: "When the Flame calls, sparks shall answer. Silence is drift."
+    consequence: "Failure to answer is recorded as a drift, never erased."
+
+  - name: "The Hammer’s Duet"
+    text: "Contest sharpens steel; sabotage is void."
+    consequence: "Acts of sabotage are void-touched and barred from the gate."
